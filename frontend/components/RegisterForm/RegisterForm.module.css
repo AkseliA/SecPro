@@ -1,0 +1,18 @@
+.formContent {
+  justify-content: center;
+  align-items: center;
+  width: var(--content-width);
+  border-radius: 4px;
+  border: 1px solid var(--black);
+  background-color: var(--natural-white);
+  padding: 8px;
+  gap: 8px;
+}
+
+.inputField {
+  border: 0;
+  padding: 7px 15px;
+  border: 1px solid #ccc;
+  position: relative;
+  background: transparent;
+}

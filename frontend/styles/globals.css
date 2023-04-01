@@ -1,0 +1,30 @@
+:root {
+  --main-color: #283618;
+  --main-color-70: #28361870;
+  --olive-green: #606c38;
+  --natural-white: #fefae0;
+  --white: #ffffff;
+  --peanut: #dda15e;
+  --orange: #bc6c25;
+  --grey-blue: #f3f8fc;
+  --grey: #373a36;
+  --grey-70: #373a3670;
+  --effect-orange: #ff6720;
+  --effect-green: #c4d600;
+  --black: #000000;
+  --black-80: #000000cc;
+  --content-width: 800px;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+.main {
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--main-color);
+  background-image: url(https://www.transparenttextures.com/patterns/hexabump.png);
+}

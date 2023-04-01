@@ -1,0 +1,6 @@
+.navbar {
+  padding: 16px;
+  margin: 0 0 40px 0;
+  background-color: var(--peanut);
+  justify-content: space-between;
+}
