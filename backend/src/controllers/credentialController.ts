@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import credentialModel from "../models/credentialModel";
 
 class CredentialController {
+  /** @TODO NEEDS REFACTORING */
   public async addCredential(req: Request, res: Response, next: NextFunction) {
     try {
       const newCredentials = req.body;
