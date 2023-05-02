@@ -8,6 +8,11 @@ router.post(
   authController.authenticateJwt,
   credentialController.addCredential
 );
+router.put(
+  "/",
+  authController.authenticateJwt,
+  credentialController.updateCredential
+);
 router.get(
   "/",
   authController.authenticateJwt,

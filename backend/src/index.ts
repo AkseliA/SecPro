@@ -7,6 +7,7 @@ import userRouter from "./routers/userRouter";
 import credentialsRouter from "./routers/credentialRouter";
 import bodyParser from "body-parser";
 import { Model } from "objection";
+import cors from "cors";
 dotenv.config();
 
 const app: Express = express();
@@ -15,6 +16,11 @@ let server: Server;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(
+  cors({
+    origin: "http://localhost:3001"
+  })
+);
 
 app.use("/user", userRouter);
 app.use("/credentials", credentialsRouter);
