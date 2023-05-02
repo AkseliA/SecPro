@@ -31,7 +31,6 @@ const LoginForm = ({
 
   const handleSubmit = async () => {
     const response = await login(data);
-    console.log(response);
     if (response) {
       setAuthState({ authenticated: true });
       setUser({ ...response });
@@ -45,22 +44,27 @@ const LoginForm = ({
     <Row width={'100%'} justifyContent={'center'}>
       <Column className={styles.formContent}>
         <h2>Login</h2>
-        <Column gap={'8px'}>
-          {infoMessage && (
-            <p style={{ color: 'red', fontWeight: 700 }}>{infoMessage}</p>
-          )}
+        {infoMessage && <p className={styles.warningText}>{infoMessage}</p>}
+        <Column gap={'2px'} width="35%">
+          <label className={styles.label}>Username</label>
           <input
             className={styles.inputField}
+            required
             type={'text'}
-            placeholder={'username'}
-            value={data.username}
+            placeholder={'Username'}
+            value={data?.username}
             onChange={e => handleChange(e, 'username')}
           />
+        </Column>
+
+        <Column gap={'2px'} width="35%">
+          <label className={styles.label}>Password</label>
           <input
             className={styles.inputField}
+            required
             type={'password'}
-            placeholder={'password'}
-            value={data.password}
+            placeholder={'Password'}
+            value={data?.password}
             onChange={e => handleChange(e, 'password')}
           />
         </Column>

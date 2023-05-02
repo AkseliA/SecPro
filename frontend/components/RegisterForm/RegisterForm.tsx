@@ -15,6 +15,7 @@ const RegisterForm = () => {
   });
   const [passwordsMatch, setPasswordsMatch] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -36,7 +37,7 @@ const RegisterForm = () => {
     const response = await register(data);
 
     if (response) {
-      console.log('success');
+      push('/');
     }
   };
 
@@ -44,31 +45,70 @@ const RegisterForm = () => {
     <Row width={'100%'} justifyContent={'center'}>
       <Column className={styles.formContent}>
         <h2>Register</h2>
-        <Column gap={'8px'}>
+
+        <Column gap={'2px'}>
+          <label className={styles.label}>Username</label>
           <input
             className={styles.inputField}
-            placeholder="Username"
+            required
             type={'text'}
-            value={data.username}
+            placeholder={'Username'}
+            value={data?.username}
             onChange={e => handleChange(e, 'username')}
           />
-          <input
-            className={styles.inputField}
-            placeholder="Password"
-            type={'password'}
-            value={data.password}
-            onChange={e => handleChange(e, 'password')}
-          />
-          <input
-            className={styles.inputField}
-            placeholder="Confirm password"
-            type={'password'}
-            onChange={e => handlePasswordConfirmationChange(e)}
-          />
+        </Column>
+
+        <Column gap={'2px'}>
+          <label className={styles.label}>Password</label>
+          <Row gap={'8px'} className={styles.relative}>
+            <input
+              className={styles.inputField}
+              required
+              type={showPassword ? 'text' : 'password'}
+              placeholder={'Password'}
+              value={data?.password}
+              onChange={e => handleChange(e, 'password')}
+            />
+            <button
+              className={styles.showPasswordButton}
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <span>&#x1F6AB;</span> : <span>&#x1F441;</span>}
+            </button>
+          </Row>
         </Column>
         {!passwordsMatch && submitting && (
-          <p style={{ color: 'red', fontWeight: 700 }}>Passwords mismatch</p>
+          <p className={styles.warningText}>Passwords mismatch</p>
         )}
+        <Column gap={'2px'}>
+          <label className={styles.label}>Password confirmation</label>
+          <Row gap={'8px'} className={styles.relative}>
+            <input
+              className={styles.inputField}
+              required
+              type={showPassword ? 'text' : 'password'}
+              placeholder={'Password confirmation'}
+              onChange={e => handlePasswordConfirmationChange(e)}
+            />
+            <button
+              className={styles.showPasswordButton}
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <span>&#x1F6AB;</span> : <span>&#x1F441;</span>}
+            </button>
+          </Row>
+        </Column>
+
+        <p
+          className={styles.greyText}
+          style={{ width: '50%', textAlign: 'center', fontSize: '12px' }}
+        >
+          Please remember that if you forget your password, you will not be able
+          to access your account and your credentials will be{' '}
+          <b>permanently lost.</b> We strongly recommend that you keep your
+          password safe and secure, and that you do not share it with anyone.
+        </p>
+
         <Row gap={'8px'}>
           <Button onClick={handleSubmit} variant={'primary'}>
             Register

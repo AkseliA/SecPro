@@ -38,29 +38,23 @@ const PasswordGenerator = () => {
     <Row width={'100%'} justifyContent={'center'}>
       <Column className={styles.generatorContent}>
         <h2>Generate password</h2>
+
         {generatedPass && generatedPass?.trim()?.length > 0 && (
-          <p
-            style={{
-              fontWeight: 'bold',
-              border: '1px solid var(--black)',
-              borderRadius: '4px',
-              padding: '8px 16px',
-              background: 'var(--white)'
-            }}
-          >
-            {generatedPass}
-          </p>
+          <p className={styles.generatedPasswordText}>{generatedPass}</p>
         )}
+
         <Row gap={'8px'}>
           <Button onClick={handleSubmit} variant={'primary'}>
             Generate
           </Button>
+
           {generatedPass && generatedPass?.trim()?.length > 0 && (
             <Button onClick={copyToClipboard} variant={'secondary'}>
               Copy
             </Button>
           )}
         </Row>
+
         <Column>
           <h3>Settings</h3>
           <Row gap={'8px'}>

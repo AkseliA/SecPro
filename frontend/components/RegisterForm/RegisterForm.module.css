@@ -6,13 +6,35 @@
   border: 1px solid var(--black);
   background-color: var(--natural-white);
   padding: 8px;
-  gap: 8px;
+  gap: 16px;
 }
 
 .inputField {
-  border: 0;
   padding: 7px 15px;
   border: 1px solid #ccc;
-  position: relative;
   background: transparent;
+  position: relative;
+  width: 100%;
+}
+
+.label {
+  font-size: 14px;
+}
+
+.relative {
+  position: relative;
+}
+
+.showPasswordButton {
+  position: absolute;
+  right: 4px;
+  top: 5px;
+  background: inherit;
+  border: none;
+  cursor: pointer;
+}
+
+.warningText {
+  text-align: center;
+  color: red;
 }

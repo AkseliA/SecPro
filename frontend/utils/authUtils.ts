@@ -36,23 +36,6 @@ export const login = async (user: IUser) => {
     .catch(() => {
       return null;
     });
-  if (res) {
-    //Store response (token) in sessionStorage
-    sessionStorage.setItem('token', res.accessToken);
-  }
 
   return res ? res : false;
-};
-
-export const logout = () => {
-  sessionStorage.clear();
-};
-
-export const getUser = () => {
-  const token = sessionStorage.getItem('token');
-  if (!token) {
-    return null;
-  }
-  //Try to decode the token to access user info (id, pwhash)
-  return token;
 };
