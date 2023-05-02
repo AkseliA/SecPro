@@ -76,7 +76,6 @@ const CredentialFormModal = ({
         .then(data => {
           setOpen(false);
           const decryptedCredential = decryptCredential(data[0].content, user);
-          console.log({ ...decryptedCredential, ...data[0] });
 
           //update credentialListing state
           updateCredentialsList((prevList: ICredential[]) =>
@@ -100,27 +99,14 @@ const CredentialFormModal = ({
         },
         body: JSON.stringify({ credential: encryptedCredentials?.toString() })
       })
-        .then(res => {
-          if (res.ok) {
-            setOpen(false);
-            updateCredentialsList(prev => [...prev, credential]);
-          }
-        })
-        .catch(() => {});
-      fetch('http://localhost:3000/credentials', {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${user.accessToken}`
-        },
-        body: JSON.stringify({ credential: encryptedCredentials?.toString() })
-      })
-        .then(res => {
-          if (res.ok) {
-            setOpen(false);
-            updateCredentialsList(prev => [...prev, credential]);
-          }
+        .then(res => res.json())
+        .then(data => {
+          setOpen(false);
+          const decryptedCredential = decryptCredential(data.content, user);
+          updateCredentialsList(prev => [
+            ...prev,
+            { ...decryptedCredential, ...data }
+          ]);
         })
         .catch(() => {});
     }
@@ -194,7 +180,7 @@ const CredentialFormModal = ({
             </Column>
 
             <Column gap={'2px'}>
-              <label className={styles.label}>Retype password</label>
+              <label className={styles.label}>Password confirmation</label>
               <Row gap={'8px'} className={styles.relative}>
                 <input
                   className={styles.inputField}

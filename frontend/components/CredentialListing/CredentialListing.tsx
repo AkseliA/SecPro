@@ -5,8 +5,8 @@ import Button from '../Button/Button';
 import CredentialFormModal from '../CredentialFormModal/CredentialFormModal';
 import { ICredential, IUser } from '../../types';
 import Row from '../FlexWrappers/Row';
-import { logout } from '../../utils/authUtils';
 import { decryptCredential } from '../../utils/cryptoUtils';
+import DeleteConfirmationModal from '../DeleteConfirmationModal/DeleteConfirmationModal';
 
 const CredentialListing = ({
   setUser,
@@ -60,7 +60,6 @@ const CredentialListing = ({
             className={styles.logoutButton}
             variant={'secondary'}
             onClick={() => {
-              logout();
               setUser(null);
             }}
           >
@@ -125,9 +124,9 @@ const CredentialRow = ({
   user: IUser;
   setCredentials: Dispatch<SetStateAction<ICredential[]>>;
 }) => {
-  //const [showPassword, setShowPassword] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   return (
     <>
       <tr className={styles.credentialRow}>
@@ -182,16 +181,34 @@ const CredentialRow = ({
               )}
             </Row>
 
-            <Button
-              className={styles.updateCredentialButton}
-              onClick={() => {
-                setModalOpen(true);
-              }}
-              variant={'text'}
-            >
-              Update
-            </Button>
-
+            <Row justifyContent={'space-between'}>
+              <Button
+                className={styles.updateCredentialButton}
+                onClick={() => {
+                  setModalOpen(true);
+                }}
+                variant={'text'}
+              >
+                Update
+              </Button>
+              <Button
+                className={styles.updateCredentialButton}
+                onClick={() => {
+                  setShowDeleteModal(true);
+                }}
+                variant={'text'}
+              >
+                Delete
+              </Button>
+            </Row>
+            {showDeleteModal && (
+              <DeleteConfirmationModal
+                setOpen={setShowDeleteModal}
+                user={user}
+                credentialToDelete={credential}
+                updateCredentialsList={setCredentials}
+              />
+            )}
             {modalOpen && (
               <CredentialFormModal
                 setOpen={setModalOpen}

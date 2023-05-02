@@ -18,5 +18,10 @@ router.get(
   authController.authenticateJwt,
   credentialController.getCredentials
 );
+router.delete(
+  "/:id",
+  authController.authenticateJwt,
+  credentialController.deleteCredential
+);
 
 export default router;
