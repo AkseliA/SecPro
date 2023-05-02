@@ -3,11 +3,12 @@ import Column from '../FlexWrappers/Column';
 import Row from '../FlexWrappers/Row';
 import React, { useState } from 'react';
 import styles from './PasswordGenerator.module.css';
-import { generatePassword } from '../../functions/generators';
+import { generatePassword } from '../../utils/generatorUtils';
+import { IPasswordSettings } from '../../types';
 
 const PasswordGenerator = () => {
   const [generatedPass, setGeneratedPass] = useState<string | null>();
-  const [settings, setSettings] = useState({
+  const [settings, setSettings] = useState<IPasswordSettings>({
     length: 12,
     uppercase: true,
     lowercase: true,
@@ -17,7 +18,7 @@ const PasswordGenerator = () => {
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    type: string
+    type: keyof IPasswordSettings
   ): void => {
     const updatedValue: string | boolean =
       type === 'length' ? e.target.value : e.target.checked;
@@ -25,7 +26,7 @@ const PasswordGenerator = () => {
   };
 
   const handleSubmit = () => {
-    const result = generatePassword(settings.length);
+    const result = generatePassword(settings);
     setGeneratedPass(result);
   };
   const copyToClipboard = () => {

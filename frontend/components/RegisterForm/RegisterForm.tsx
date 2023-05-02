@@ -5,15 +5,16 @@ import Button from '../Button/Button';
 import Column from '../FlexWrappers/Column';
 import Row from '../FlexWrappers/Row';
 import styles from './RegisterForm.module.css';
+import { register } from '../../utils/authUtils';
 
 const RegisterForm = () => {
   const { push } = useRouter();
-  const [infoText, setInfoText] = useState<string>('');
   const [data, setData] = useState({
     username: '',
-    password: '',
-    passwordConfirmation: ''
+    password: ''
   });
+  const [passwordsMatch, setPasswordsMatch] = useState<boolean>(false);
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -21,14 +22,22 @@ const RegisterForm = () => {
   ): void => {
     setData({ ...data, [type]: e.target.value });
   };
+  const handlePasswordConfirmationChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    setPasswordsMatch(e.target.value === data.password);
+  };
 
-  const handleSubmit = () => {
-    console.log(data);
-    if (data.password !== data.passwordConfirmation) {
-      setInfoText('Passwords differ');
+  const handleSubmit = async () => {
+    setSubmitting(true);
+    if (!passwordsMatch) {
       return;
     }
-    setInfoText('rekisteröidään');
+    const response = await register(data);
+
+    if (response) {
+      console.log('success');
+    }
   };
 
   return (
@@ -36,7 +45,6 @@ const RegisterForm = () => {
       <Column className={styles.formContent}>
         <h2>Register</h2>
         <Column gap={'8px'}>
-          <p style={{ color: 'red', fontWeight: 700 }}>{infoText}</p>
           <input
             className={styles.inputField}
             placeholder="Username"
@@ -55,10 +63,12 @@ const RegisterForm = () => {
             className={styles.inputField}
             placeholder="Confirm password"
             type={'password'}
-            value={data.passwordConfirmation}
-            onChange={e => handleChange(e, 'passwordConfirmation')}
+            onChange={e => handlePasswordConfirmationChange(e)}
           />
         </Column>
+        {!passwordsMatch && submitting && (
+          <p style={{ color: 'red', fontWeight: 700 }}>Passwords mismatch</p>
+        )}
         <Row gap={'8px'}>
           <Button onClick={handleSubmit} variant={'primary'}>
             Register
@@ -67,7 +77,7 @@ const RegisterForm = () => {
             Cancel
           </Button>
         </Row>
-        <Link href={'/login'}>Already registered? Click to login</Link>
+        <Link href={'/'}>Already registered? Click to login</Link>
       </Column>
     </Row>
   );

@@ -1,9 +1,7 @@
 import styles from './Layout.module.css';
 //import { useRouter } from 'next/router';
 import { ReactNode } from 'react';
-import Button from '../Button/Button';
 import Row from '../FlexWrappers/Row';
-import { useRouter } from 'next/router';
 import Link from 'next/link';
 
 interface LayoutProps {
@@ -11,14 +9,6 @@ interface LayoutProps {
 }
 
 const Layout = ({ children }: LayoutProps) => {
-  const { push } = useRouter();
-  //const { pathname } = useRouter();
-
-  // Prevent layout from flashing by not rendering it if we enter protected page without proper token etc
-  //   if (!user.token && protectedPages.some(v => pathname.includes(v))) {
-  //     return <div>{children}</div>;
-  //   }
-
   return (
     <>
       <Row className={styles.navbar}>
@@ -28,9 +18,6 @@ const Layout = ({ children }: LayoutProps) => {
         >
           <h1>Password Manager</h1>
         </Link>
-        <Button variant={'text'} onClick={() => push('/login')}>
-          Login
-        </Button>
       </Row>
       <main>{children}</main>
     </>
