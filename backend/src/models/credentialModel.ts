@@ -11,11 +11,11 @@ export default class credentialModel extends Model {
   static get tableName() {
     return "credentials";
   }
-  async $beforeInsert() {
+  $beforeInsert() {
     this.created_at = new Date().toISOString();
   }
 
-  async $beforeUpdate() {
+  $beforeUpdate() {
     this.updated_at = new Date().toISOString();
   }
 
@@ -26,10 +26,10 @@ export default class credentialModel extends Model {
 
       properties: {
         id: { type: "integer" },
-        user_ref: { type: "integer" },
-        content: { type: "string" },
-        created_at: { type: "string" },
-        updated_at: { type: "string" }
+        user_ref: { type: "integer" }, //reference to the user
+        content: { type: "string", maxLength: 1024 }, //The contents of this row are encrypted thus the max length 1024
+        created_at: { type: "string" }, //timestamp
+        updated_at: { type: "string" } //timestamp
       }
     };
   }

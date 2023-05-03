@@ -11,11 +11,12 @@ export default class userModel extends Model {
   static get tableName() {
     return "users";
   }
-  async $beforeInsert() {
+
+  $beforeInsert() {
     this.created_at = new Date().toISOString();
   }
 
-  async $beforeUpdate() {
+  $beforeUpdate() {
     this.updated_at = new Date().toISOString();
   }
 
@@ -27,10 +28,10 @@ export default class userModel extends Model {
 
       properties: {
         id: { type: "integer" },
-        username: { type: "string", minLength: 1, maxLength: 255 },
-        password: { type: "string", minLength: 1 },
-        created_at: { type: "string" },
-        updated_at: { type: "string" }
+        username: { type: "string", minLength: 5, maxLength: 32 }, //Username
+        password: { type: "string", minLength: 1, maxLength: 255 }, //hash (pwhash+salt+vaultKeySalt), maxLength = default max length of psql row content
+        created_at: { type: "string" }, //Timestamp
+        updated_at: { type: "string" } //timestamp
       }
     };
   }

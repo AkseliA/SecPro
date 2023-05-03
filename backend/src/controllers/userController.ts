@@ -35,7 +35,7 @@ class UserController {
 
         //User does exit -> return
       } else {
-        res.status(400).json("Username in use");
+        res.status(403).json("Error registering user");
       }
     } catch (err) {
       res.status(500).json("Error registering user");
@@ -73,9 +73,11 @@ class UserController {
         username: userCandidate.username,
         pwhash: userCandidate.password
       };
+
       const token = jwt.sign(jwtPayload, process.env.JWT_SECRET, {
         expiresIn: 60 * 60
       });
+
       res.json({
         accessToken: token,
         id: userCandidate.id,
@@ -87,7 +89,6 @@ class UserController {
     }
     next();
   }
-
 }
 
 export default new UserController();
