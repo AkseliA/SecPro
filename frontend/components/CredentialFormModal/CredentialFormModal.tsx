@@ -58,7 +58,12 @@ const CredentialFormModal = ({
     if (!passwordsMatch) {
       return;
     }
+
     const encryptedCredentials = encryptCredential(credential, user);
+    if (!encryptedCredentials) {
+      return;
+    }
+
     if (update && credentialToUpdate) {
       fetch('http://localhost:3000/credentials', {
         method: 'PUT',
@@ -78,15 +83,17 @@ const CredentialFormModal = ({
           const decryptedCredential = decryptCredential(data[0].content, user);
 
           //update credentialListing state
-          updateCredentialsList((prevList: ICredential[]) =>
-            prevList.map((cred: ICredential) => {
-              if (cred.id === credentialToUpdate.id) {
-                return { ...decryptedCredential, ...data[0] };
-              } else {
-                return cred;
-              }
-            })
-          );
+          if (decryptedCredential) {
+            updateCredentialsList((prevList: ICredential[]) =>
+              prevList.map((cred: ICredential) => {
+                if (cred.id === credentialToUpdate.id) {
+                  return { ...decryptedCredential, ...data[0] };
+                } else {
+                  return cred;
+                }
+              })
+            );
+          }
         })
         .catch(() => {});
     } else if (!update) {
@@ -103,10 +110,14 @@ const CredentialFormModal = ({
         .then(data => {
           setOpen(false);
           const decryptedCredential = decryptCredential(data.content, user);
-          updateCredentialsList(prev => [
-            ...prev,
-            { ...decryptedCredential, ...data }
-          ]);
+
+          //update credentialListing state
+          if (decryptedCredential) {
+            updateCredentialsList(prev => [
+              ...prev,
+              { ...decryptedCredential, ...data }
+            ]);
+          }
         })
         .catch(() => {});
     }

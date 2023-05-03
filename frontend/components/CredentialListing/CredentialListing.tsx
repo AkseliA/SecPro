@@ -32,15 +32,22 @@ const CredentialListing = ({
       })
         .then(res => res.json())
         .catch(() => {});
+
       if (data?.credentials) {
-        const decryptedCredentials = data.credentials.map(
-          (cred: ICredential) => {
+        const decryptedCredentials = data.credentials
+          .map((cred: ICredential) => {
+            const decryptedCred = decryptCredential(cred?.content, user);
+            if (!decryptedCred) {
+              return null;
+            }
             return {
-              ...decryptCredential(cred.content, user),
+              ...decryptedCred,
               ...cred
             };
-          }
-        );
+          })
+          //Finally filter out null values (where decrypt failed for reason or another)
+          .filter((cred: ICredential) => cred !== null);
+
         setCredentials(decryptedCredentials);
       }
     };

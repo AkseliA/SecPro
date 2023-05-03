@@ -11,7 +11,7 @@ const possibleCharacters = {
 /**
  * Generates passwords in a following way:
  *  - First a CSPRNG (Cryptographically Secure Pseudo-Random Number Generator)
- *      is used for generating a "seed". For this purpose a
+ *      is used for generating a "seed". For this purpose a crypto.randomBytes() is used.
  *  - The seed is then mapped into a characterset defined by the user
  * @returns generatedPassword or null
  */
