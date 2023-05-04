@@ -37,4 +37,6 @@
 .warningText {
   text-align: center;
   color: red;
+  font-size: 14px;
+  width: 75%;
 }

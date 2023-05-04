@@ -6,9 +6,11 @@ import Column from '../FlexWrappers/Column';
 import Row from '../FlexWrappers/Row';
 import styles from './RegisterForm.module.css';
 import { register } from '../../utils/authUtils';
+import { isValidPassword, isValidUsername } from '../../utils/validatorUtils';
 
 const RegisterForm = () => {
   const { push } = useRouter();
+  const [infoText, setInfoText] = useState<string>('');
   const [data, setData] = useState({
     username: '',
     password: ''
@@ -31,9 +33,24 @@ const RegisterForm = () => {
 
   const handleSubmit = async () => {
     setSubmitting(true);
+    //Validate that passwords match
     if (!passwordsMatch) {
+      setInfoText('Passwords mismatch');
       return;
     }
+    //validate that username meets requirements
+    if (!isValidUsername(data.username)) {
+      setInfoText('Username must be between 5 - 32 characters');
+      return;
+    }
+    //Validate that password meets requirements
+    if (!isValidPassword(data.password)) {
+      setInfoText(
+        'Password must be between 8 - 64 characters, have at least 1 uppercase letter, 1 lowercase letter, 1 special character and 1 digit'
+      );
+      return;
+    }
+
     const response = await register(data);
 
     if (response) {
@@ -45,7 +62,9 @@ const RegisterForm = () => {
     <Row width={'100%'} justifyContent={'center'}>
       <Column className={styles.formContent}>
         <h2>Register</h2>
-
+        {submitting && infoText && (
+          <p className={styles.warningText}>{infoText}</p>
+        )}
         <Column gap={'2px'}>
           <label className={styles.label}>Username</label>
           <input
@@ -77,9 +96,7 @@ const RegisterForm = () => {
             </button>
           </Row>
         </Column>
-        {!passwordsMatch && submitting && (
-          <p className={styles.warningText}>Passwords mismatch</p>
-        )}
+
         <Column gap={'2px'}>
           <label className={styles.label}>Password confirmation</label>
           <Row gap={'8px'} className={styles.relative}>

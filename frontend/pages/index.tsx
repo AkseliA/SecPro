@@ -20,17 +20,14 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    if (clientLoaded) {
-      //If user is authenticated -> fetch encrypted credentials and decrypt them
-      if (user) {
-        setAuthState({
-          authenticated: true
-        });
-      } else {
-        setAuthState({
-          authenticated: false
-        });
-      }
+    if (clientLoaded && user) {
+      setAuthState({
+        authenticated: true
+      });
+    } else {
+      setAuthState({
+        authenticated: false
+      });
     }
   }, [clientLoaded, user]);
 

@@ -6,6 +6,7 @@ import styles from './CredentialFormModal.module.css';
 import { ICredential, IUser } from '../../types';
 import { decryptCredential, encryptCredential } from '../../utils/cryptoUtils';
 import { generatePassword } from '../../utils/generatorUtils';
+import { validateCredentialForm } from '../../utils/validatorUtils';
 
 interface IProps {
   setOpen: Dispatch<SetStateAction<boolean>>;
@@ -31,6 +32,7 @@ const CredentialFormModal = ({
   const [passwordsMatch, setPasswordsMatch] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [infoText, setInfoText] = useState<string[]>(['']);
 
   useEffect(() => {
     if (credentialToUpdate) {
@@ -55,10 +57,18 @@ const CredentialFormModal = ({
 
   const handleSubmit = () => {
     setSubmitting(true);
+
+    const validation = validateCredentialForm(credential);
+    if (!validation.valid) {
+      setInfoText(validation.errors);
+      return;
+    }
     if (!passwordsMatch) {
+      setInfoText(['Passwords mismatch']);
       return;
     }
 
+    //Encrypt the credential before storing
     const encryptedCredentials = encryptCredential(credential, user);
     if (!encryptedCredentials) {
       return;
@@ -122,6 +132,7 @@ const CredentialFormModal = ({
         .catch(() => {});
     }
   };
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     type: string
@@ -143,37 +154,37 @@ const CredentialFormModal = ({
 
           <Column gap={'8px'} width={'100%'}>
             <Column gap={'2px'}>
-              <label className={styles.label}>Website</label>
+              <label className={styles.label}>Website *</label>
               <input
                 className={styles.inputField}
                 required
                 type={'text'}
-                placeholder={'Website'}
+                placeholder={'Website *'}
                 value={credential?.website}
                 onChange={e => handleChange(e, 'website')}
               />
             </Column>
 
             <Column gap={'2px'}>
-              <label className={styles.label}>Username</label>
+              <label className={styles.label}>Username *</label>
               <input
                 className={styles.inputField}
                 required
                 type={'text'}
-                placeholder={'Username'}
+                placeholder={'Username *'}
                 value={credential?.username}
                 onChange={e => handleChange(e, 'username')}
               />
             </Column>
 
             <Column gap={'2px'}>
-              <label className={styles.label}>Password</label>
+              <label className={styles.label}>Password *</label>
               <Row gap={'8px'} className={styles.relative}>
                 <input
                   className={styles.inputField}
                   required
                   type={showPassword ? 'text' : 'password'}
-                  placeholder={'Password'}
+                  placeholder={'Password *'}
                   value={credential?.password}
                   onChange={e => handleChange(e, 'password')}
                 />
@@ -191,13 +202,13 @@ const CredentialFormModal = ({
             </Column>
 
             <Column gap={'2px'}>
-              <label className={styles.label}>Password confirmation</label>
+              <label className={styles.label}>Password confirmation *</label>
               <Row gap={'8px'} className={styles.relative}>
                 <input
                   className={styles.inputField}
                   required
                   type={showPassword ? 'text' : 'password'}
-                  placeholder={'Password confirmation'}
+                  placeholder={'Password confirmation *'}
                   onChange={e => handlePasswordConfirmationChange(e)}
                 />
                 <button
@@ -234,8 +245,11 @@ const CredentialFormModal = ({
             </Button>
 
             <Column gap={'2px'}>
-              <label className={styles.label}>Notes</label>
+              <label className={styles.label}>
+                Notes ({credential?.notes?.length} characters)
+              </label>
               <textarea
+                maxLength={128}
                 className={`${styles.inputField} ${styles.textarea}`}
                 placeholder={'Notes'}
                 value={credential?.notes?.toString()}
@@ -244,8 +258,14 @@ const CredentialFormModal = ({
               />
             </Column>
 
-            {!passwordsMatch && submitting && (
-              <p className={styles.warningText}>Passwords mismatch</p>
+            {infoText && submitting && (
+              <Column>
+                {infoText.map((text: string, index: number) => (
+                  <p key={index} className={styles.warningText}>
+                    {text}
+                  </p>
+                ))}
+              </Column>
             )}
           </Column>
           <Row gap={'8px'}>
