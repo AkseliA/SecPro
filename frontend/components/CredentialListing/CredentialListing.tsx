@@ -16,9 +16,9 @@ const CredentialListing = ({
   user: IUser;
 }) => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  useState<ICredential[]>();
   const [credentials, setCredentials] = useState<ICredential[]>([]);
 
+  //When the component loads (or user state changes) fetch all credentials of user
   useEffect(() => {
     const fetchCredentials = async () => {
       setCredentials([]);
@@ -34,9 +34,12 @@ const CredentialListing = ({
         .catch(() => {});
 
       if (data?.credentials) {
+        //Loop through returned credentials and decrypt them.
         const decryptedCredentials = data.credentials
           .map((cred: ICredential) => {
             const decryptedCred = decryptCredential(cred?.content, user);
+
+            //If the decryptCredential function fails, a null is returned.
             if (!decryptedCred) {
               return null;
             }

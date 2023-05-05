@@ -48,6 +48,10 @@ const CredentialFormModal = ({
   const handleClose = () => {
     setOpen(false);
   };
+
+  /**
+   * Function for closing the modal if there are any mouse events outside the modal.
+   */
   const handleOverlayClick = (event: React.MouseEvent<HTMLDivElement>) => {
     // Check if the click occurred outside of the modal container
     if ((event.target as HTMLDivElement).className.includes('modalOverlay')) {
@@ -55,6 +59,15 @@ const CredentialFormModal = ({
     }
   };
 
+  /**
+   * Handle form submit
+   *
+   * First the credential is encrypted before sending to the backend.
+   * After encryption create either a POST or PUT request to the backend,
+   * depending on credential "update" (boolean) state.
+   *
+   * After successful operation, update the credentialListing to reflect the changes.
+   */
   const handleSubmit = () => {
     setSubmitting(true);
 
@@ -70,6 +83,8 @@ const CredentialFormModal = ({
 
     //Encrypt the credential before storing
     const encryptedCredentials = encryptCredential(credential, user);
+
+    //If there were errors during encryption a null is returned -> return from this function.
     if (!encryptedCredentials) {
       return;
     }
@@ -90,9 +105,10 @@ const CredentialFormModal = ({
         .then(res => res.json())
         .then(data => {
           setOpen(false);
+          //Decrypt the encrypted credential returned from the backend.
           const decryptedCredential = decryptCredential(data[0].content, user);
 
-          //update credentialListing state
+          //update credentialListing state - reflect the changes to the listing
           if (decryptedCredential) {
             updateCredentialsList((prevList: ICredential[]) =>
               prevList.map((cred: ICredential) => {
@@ -119,9 +135,10 @@ const CredentialFormModal = ({
         .then(res => res.json())
         .then(data => {
           setOpen(false);
+          //Decrypt the encrypted credential returned from the backend.
           const decryptedCredential = decryptCredential(data.content, user);
 
-          //update credentialListing state
+          //update credentialListing state - append the created credential to listing.
           if (decryptedCredential) {
             updateCredentialsList(prev => [
               ...prev,
@@ -140,6 +157,9 @@ const CredentialFormModal = ({
     setCredential({ ...credential, [type]: e.target.value });
   };
 
+  /**
+   * Function for checking that supplied password and password confirmation match.
+   */
   const handlePasswordConfirmationChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ): void => {

@@ -21,6 +21,7 @@ export interface ICredential {
 export interface IUser {
   id?: string | number;
   passwordHash?: string;
+  password?: string; //in login form a plaintext password is supplied
   username?: string;
   accessToken?: string;
 }
