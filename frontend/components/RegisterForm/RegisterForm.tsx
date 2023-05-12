@@ -33,16 +33,20 @@ const RegisterForm = () => {
 
   const handleSubmit = async () => {
     setSubmitting(true);
+    //validate that username meets requirements
+    if (!isValidUsername(data.username)) {
+      setInfoText(
+        'Username must be between 5 - 32 characters and not contain whitespaces'
+      );
+      return;
+    }
+
     //Validate that passwords match
     if (!passwordsMatch) {
       setInfoText('Passwords mismatch');
       return;
     }
-    //validate that username meets requirements
-    if (!isValidUsername(data.username)) {
-      setInfoText('Username must be between 5 - 32 characters');
-      return;
-    }
+
     //Validate that password meets requirements
     if (!isValidPassword(data.password)) {
       setInfoText(

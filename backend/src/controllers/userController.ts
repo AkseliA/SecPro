@@ -117,14 +117,12 @@ class UserController {
 const isValidPassword = (password: string): boolean => {
   //Length requirement
   if (password?.length < 8 || password?.length > 64) {
-    console.log("length");
     return false;
   }
   //Regex for checking that password has atleast 1x digit, symbol, upper&lowercase characters
   const regex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[,._\-*~"<>/|!@#$%^&()+=])[A-Za-z\d,._\-*~"<>/|!@#$%^&()+=]+$/;
   if (!regex.test(password)) {
-    console.log("regex");
     return false;
   }
 
@@ -136,6 +134,7 @@ const isValidPassword = (password: string): boolean => {
  * When storing the username in database, additional validation is done against defined jsonSchema (in userModel)
  * Requirements:
  *  - Length between 5 - 32 characters
+ *  - Does not have whitespaces
  *
  * @param username
  * @returns boolean - indicates if is valid (true) or not valid (false)
@@ -143,6 +142,9 @@ const isValidPassword = (password: string): boolean => {
 const isValidUsername = (username: string): boolean => {
   const trimmed = username.trim(); //remove whitespaces
   if (trimmed?.length < 5 || trimmed?.length > 32) {
+    return false;
+  }
+  if (trimmed !== username) {
     return false;
   }
   return true;
