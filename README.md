@@ -2,6 +2,10 @@
 
 ## Getting Started
 
+### Prerequisites
+- Local PostgreSQL installation up and running. **NOTE: A database must be created**
+- Node version  >= 16
+
 To start the program, start the backend and after that start the frontend.
 
 ### Running the backend
@@ -9,6 +13,7 @@ To start the program, start the backend and after that start the frontend.
 - From the root of the project, navigate to the backend folder: `cd backend`
 - Install all dependencies: `npm i`
 - Create and populate an .env file (to ./backend) according to the .env.template file
+    - The database with same name must be created manually. In psql the database can be created with `CREATE DATABASE <name>;`
 - Start the backend (dev)server: `npm run dev`
 
 ### Running the frontend
