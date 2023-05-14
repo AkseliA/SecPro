@@ -18,7 +18,7 @@ To start the program, start the backend and after that start the frontend.
 
 ### Running the frontend
 Dev:
-- From the root of the project, navigate to the backend folder: `cd frontend`
+- From the root of the project, navigate to the frontend folder: `cd frontend`
 - Install all dependencies: `npm i`
 - Start the backend (dev)server: `npm run dev`
 
